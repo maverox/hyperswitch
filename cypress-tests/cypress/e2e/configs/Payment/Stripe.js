@@ -1591,6 +1591,7 @@ export const connectorDetails = {
       Request: {
         payment_method: "bank_debit",
         payment_method_type: "sepa",
+        currency: "EUR",
         payment_method_data: {
           bank_debit: {
             sepa_bank_debit: {
@@ -1636,6 +1637,7 @@ export const connectorDetails = {
       Request: {
         payment_method: "bank_debit",
         payment_method_type: "becs",
+        currency: "AUD",
         payment_method_data: {
           bank_debit: {
             becs_bank_debit: {
@@ -1683,6 +1685,8 @@ export const connectorDetails = {
       },
       Request: {
         off_session: true,
+        confirm: true,
+        currency: "EUR",
       },
       Response: {
         status: 200,
@@ -1699,6 +1703,8 @@ export const connectorDetails = {
       },
       Request: {
         off_session: true,
+        confirm: true,
+        currency: "AUD",
       },
       Response: {
         status: 200,
