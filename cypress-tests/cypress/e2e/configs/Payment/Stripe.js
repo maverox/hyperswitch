@@ -1684,6 +1684,7 @@ export const connectorDetails = {
     },
     MandateSingleUseSepa: {
       Configs: {
+        TRIGGER_SKIP: false,
         CONNECTOR_CREDENTIAL: {
           value: "connector_5",
         },
@@ -1730,6 +1731,7 @@ export const connectorDetails = {
     },
     MandateSingleUseBecs: {
       Configs: {
+        TRIGGER_SKIP: false,
         CONNECTOR_CREDENTIAL: {
           value: "connector_4",
         },
@@ -1779,6 +1781,7 @@ export const connectorDetails = {
     },
     MITAutoCaptureSepa: {
       Configs: {
+        TRIGGER_SKIP: false,
         CONNECTOR_CREDENTIAL: {
           value: "connector_5",
         },
@@ -1797,6 +1800,7 @@ export const connectorDetails = {
     },
     MITAutoCaptureBecs: {
       Configs: {
+        TRIGGER_SKIP: false,
         CONNECTOR_CREDENTIAL: {
           value: "connector_4",
         },
