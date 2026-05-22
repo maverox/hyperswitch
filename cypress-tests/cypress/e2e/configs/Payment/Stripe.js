@@ -1444,6 +1444,7 @@ export const connectorDetails = {
         currency: "EUR",
         payment_method: "bank_debit",
         payment_method_type: "sepa",
+        setup_future_usage: null,
         payment_method_data: {
           bank_debit: {
             sepa_bank_debit: {
@@ -1479,6 +1480,7 @@ export const connectorDetails = {
         currency: "AUD",
         payment_method: "bank_debit",
         payment_method_type: "becs",
+        setup_future_usage: null,
         payment_method_data: {
           bank_debit: {
             becs_bank_debit: {
