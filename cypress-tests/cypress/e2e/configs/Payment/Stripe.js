@@ -1435,8 +1435,6 @@ export const connectorDetails = {
     },
     Sepa: {
       Configs: {
-        // TRIGGER_SKIP: Stripe requires mandate_data for all SEPA bank debit payments — use MandateSingleUseSepa instead
-        TRIGGER_SKIP: true,
         CONNECTOR_CREDENTIAL: {
           value: "connector_5",
         },
@@ -1471,8 +1469,6 @@ export const connectorDetails = {
     },
     Becs: {
       Configs: {
-        // TRIGGER_SKIP: Stripe requires mandate_data for all BECS bank debit payments — use MandateSingleUseBecs instead
-        TRIGGER_SKIP: true,
         CONNECTOR_CREDENTIAL: {
           value: "connector_4",
         },
