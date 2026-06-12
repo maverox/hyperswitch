@@ -400,11 +400,10 @@ impl TryFrom<(&RefreshTokenRouterData, &SantanderMetadataObject)> for SantanderA
         item: (&RefreshTokenRouterData, &SantanderMetadataObject),
     ) -> Result<Self, Self::Error> {
         let (client_id, client_secret) = match item.0.payment_method_type {
-            Some(enums::PaymentMethodType::PixEmv) => {
+            Some(enums::PaymentMethodType::PixQr) => {
                 let pix_mca_metadata = item
                     .1
-                    .pix_emv
-                    .as_ref()
+                    .pix_qr_metadata()
                     .ok_or(errors::ConnectorError::NoConnectorMetaData)?;
                 Ok((
                     pix_mca_metadata.client_id.clone(),
@@ -792,11 +791,11 @@ impl
             SantanderMetadataObject::try_from(&value.0.router_data.connector_meta_data)?;
 
         let mca_chave = match value.0.router_data.payment_method_type {
-            Some(enums::PaymentMethodType::PixEmv) => Some(
+            Some(enums::PaymentMethodType::PixQr) => Some(
                 santander_mca_metadata
-                    .pix_emv
+                    .into_pix_qr_metadata()
                     .ok_or(errors::ConnectorError::NoConnectorMetaData)
-                    .attach_printable("Failed to get pix emv mca metadata")?
+                    .attach_printable("Failed to get pix qr mca metadata")?
                     .pix_key_value,
             ),
             Some(enums::PaymentMethodType::PixAutomaticoQr) => Some(
@@ -1786,7 +1785,7 @@ fn get_qr_code_data<F, T>(
     let santander_mca_metadata = SantanderMetadataObject::try_from(&item.data.connector_meta_data)?;
 
     let pix_mca_metadata = santander_mca_metadata
-        .pix_emv
+        .into_pix_qr_metadata()
         .ok_or(errors::ConnectorError::NoConnectorMetaData)?;
 
     let response = pix_data.clone();
@@ -1887,7 +1886,7 @@ impl TryFrom<&PaymentsUpdateMetadataRouterData> for SantanderPaymentRequest {
     type Error = Error;
     fn try_from(value: &PaymentsUpdateMetadataRouterData) -> Result<Self, Self::Error> {
         match value.request.payment_method_type {
-            Some(common_enums::PaymentMethodType::PixEmv) => {
+            Some(common_enums::PaymentMethodType::PixQr) => {
                 let pix_qr = SantanderPixQRPaymentRequest::try_from(value)?;
                 Ok(Self::PixQR(Box::new(pix_qr)))
             }
@@ -1989,11 +1988,11 @@ impl TryFrom<&PaymentsUpdateMetadataRouterData> for SantanderPixQRPaymentRequest
 
     fn try_from(value: &PaymentsUpdateMetadataRouterData) -> Result<Self, Self::Error> {
         match value.request.payment_method_type {
-            Some(common_enums::PaymentMethodType::PixEmv) => {
+            Some(common_enums::PaymentMethodType::PixQr) => {
                 let santander_mca_metadata =
                     SantanderMetadataObject::try_from(&value.connector_meta_data)?;
                 let pix_mca_metadata = santander_mca_metadata
-                    .pix_emv
+                    .into_pix_qr_metadata()
                     .ok_or(errors::ConnectorError::NoConnectorMetaData)?;
                 let calendar = match &value
                     .request
@@ -2748,7 +2747,7 @@ pub fn decide_access_token_key_suffix(
         true => Some(AccessTokenUrlPath::Leg2),
         false => {
             match (current_flow_info, payment_method_type) {
-                (Some(CurrentFlowInfo::Psync { .. }), Some(enums::PaymentMethodType::PixEmv)) => {
+                (Some(CurrentFlowInfo::Psync { .. }), Some(enums::PaymentMethodType::PixQr)) => {
                     Some(AccessTokenUrlPath::Leg1)
                 }
                 // Authorize flow
@@ -2758,7 +2757,7 @@ pub fn decide_access_token_key_suffix(
                 ) => Some(AccessTokenUrlPath::Boleto),
                 (
                     Some(CurrentFlowInfo::Authorize { .. }),
-                    Some(enums::PaymentMethodType::PixEmv),
+                    Some(enums::PaymentMethodType::PixQr),
                 ) => Some(AccessTokenUrlPath::Leg1),
                 (
                     Some(CurrentFlowInfo::Authorize { .. }),
@@ -2778,7 +2777,7 @@ pub fn decide_access_token_key_suffix(
                 ) => Some(AccessTokenUrlPath::Boleto),
                 (
                     Some(CurrentFlowInfo::CompleteAuthorize { .. }),
-                    Some(enums::PaymentMethodType::PixEmv),
+                    Some(enums::PaymentMethodType::PixQr),
                 ) => Some(AccessTokenUrlPath::Leg1),
                 (
                     Some(CurrentFlowInfo::CompleteAuthorize { .. }),
@@ -2801,7 +2800,7 @@ pub fn decide_access_token_key_suffix(
                 ) => Some(AccessTokenUrlPath::Boleto),
                 (
                     Some(CurrentFlowInfo::SetupMandate { .. }),
-                    Some(enums::PaymentMethodType::PixEmv),
+                    Some(enums::PaymentMethodType::PixQr),
                 ) => Some(AccessTokenUrlPath::Leg1),
                 (
                     Some(CurrentFlowInfo::SetupMandate { .. }),
@@ -2813,7 +2812,7 @@ pub fn decide_access_token_key_suffix(
                 ) => Some(AccessTokenUrlPath::Leg2),
 
                 (None, Some(enums::PaymentMethodType::Boleto)) => Some(AccessTokenUrlPath::Boleto),
-                (None, Some(enums::PaymentMethodType::PixEmv)) => Some(AccessTokenUrlPath::Leg1),
+                (None, Some(enums::PaymentMethodType::PixQr)) => Some(AccessTokenUrlPath::Leg1),
                 (
                     Some(CurrentFlowInfo::Psync { .. }),
                     Some(enums::PaymentMethodType::PixAutomaticoPush),

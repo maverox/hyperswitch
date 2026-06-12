@@ -55,10 +55,22 @@ pub enum SantanderDiscountType {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SantanderMetadataObject {
+    pub pix_qr: Option<PixMetadataObject>,
+    #[serde(default)]
     pub pix_emv: Option<PixMetadataObject>,
     pub boleto: Option<BoletoMetadataObject>,
     pub pix_automatico_push: Option<PixAutomaticoPushMetadataObject>,
     pub pix_automatico_qr: Option<PixAutomaticoQrMetadataObject>,
+}
+
+impl SantanderMetadataObject {
+    pub fn pix_qr_metadata(&self) -> Option<&PixMetadataObject> {
+        self.pix_qr.as_ref().or(self.pix_emv.as_ref())
+    }
+
+    pub fn into_pix_qr_metadata(self) -> Option<PixMetadataObject> {
+        self.pix_qr.or(self.pix_emv)
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
