@@ -85,9 +85,6 @@ const paymentScenarios = {
     },
   }),
   No3DSManualCapture: getCustomExchange({
-    Configs: {
-      DELAY: { STATUS: true, TIMEOUT: 5000 },
-    },
     Request: {
       payment_method: "card",
       payment_method_data: { card: null },
@@ -103,9 +100,6 @@ const paymentScenarios = {
     },
   }),
   No3DSAutoCapture: getCustomExchange({
-    Configs: {
-      DELAY: { STATUS: true, TIMEOUT: 5000 },
-    },
     Request: {
       payment_method: "card",
       payment_method_data: { card: null },
@@ -135,9 +129,6 @@ const paymentScenarios = {
     },
   }),
   PaymentConfirmWithShippingCost: getCustomExchange({
-    Configs: {
-      DELAY: { STATUS: true, TIMEOUT: 5000 },
-    },
     Request: {
       payment_method: "card",
       payment_method_data: { card: null },
@@ -156,9 +147,6 @@ const paymentScenarios = {
     },
   }),
   No3DSFailPayment: getCustomExchange({
-    Configs: {
-      DELAY: { STATUS: true, TIMEOUT: 5000 },
-    },
     Request: {
       payment_method: "card",
       payment_method_data: { card: null },
@@ -365,9 +353,6 @@ const mandateScenarios = {
     },
   },
   SaveCardUseNo3DSAutoCapture: {
-    Configs: {
-      DELAY: { STATUS: true, TIMEOUT: 5000 },
-    },
     Request: {
       payment_method: "card",
       payment_method_data: { card: null, billing: standardBillingAddress },
@@ -483,6 +468,7 @@ function mergeRefunds(pmScenarios, refundScens) {
 }
 
 export const connectorDetails = {
+  card_pm: { ...mergeRefunds(creditPaymentRaw, refundScenarios), ...creditMandateRaw },
   card_credit_pm: mergeRefunds(stampType(creditPaymentRaw, "credit"), refundScenarios),
   card_credit_mandate: stampType(creditMandateRaw, "credit"),
   card_debit_pm: mergeRefunds(stampType(debitPaymentRaw, "debit"), refundScenarios),
